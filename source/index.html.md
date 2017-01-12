@@ -1,15 +1,15 @@
 ---
-title: API Reference
+title: Dyno Email Marketing API Reference
 
 language_tabs:
-  - shell
-  - ruby
-  - python
-  - javascript
+- curl
+- java
+- python
+- php
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
-  - <a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a>
+  - <a href='http://mail.dyno.me/#/account/settings'>Sign Up for a Developer Key</a>
+  - Powered by Dyno Email Marketing
 
 includes:
   - errors
@@ -19,171 +19,371 @@ search: true
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+Welcome to the Dyno Email Marketing API! You can use our API to access information on various objects in our system.
 
-We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+We have language bindings in Curl, Java, Python, Php ! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
 
-This example API documentation page was created with [Slate](https://github.com/tripit/slate). Feel free to edit it and use it as a base for your own API's documentation.
+
+# Enviroment
+Production: api.mail.dyno.me:19000	
+
 
 # Authentication
 
-> To authorize, use this code:
+To authorize, use this header in your request:
 
-```ruby
-require 'kittn'
+`User-Api-Key:dyno`
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
+Make sure to replace `dyno` with your API key.
 
-```python
-import kittn
+You can register a new API key at our [setting module](http://mail.dyno.me/#/account/settings)
 
-api = kittn.authorize('meowmeowmeow')
-```
 
-```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
-```
+# API convention
 
-```javascript
-const kittn = require('kittn');
+## Request
+Request must set header **User-Api-Key**
 
-let api = kittn.authorize('meowmeowmeow');
-```
+PUT & POST request must set header **Content-Type** to **application/json**
 
-> Make sure to replace `meowmeowmeow` with your API key.
+Find & Count request must based on flat json to support dynamic filtering, listing
+Our api support following type with operations
 
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
+**String**
 
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
+* Equal
+	
+* Like
+	
+		Like: like
+		Like ignore case: like_ignore_case
+		Like regex: like_regex
+		
+* Not Like
+	
+		Not Like: not_like
+		Not Like ignore case: not_like_ignore_case
+		Not Like regex: not_like_regex
+		
+* In: in
+	
+* Not in: not_in
+	
+* Sample: 
+	
+		Equal: {"username":"username"}
+		Like: "email":{"like":"thanhdd"}
+		In: “id”: {“in”: “123,234”}
 
-`Authorization: meowmeowmeow`
+**Number**
 
-<aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
-</aside>
+* Equal: eq
+	
+* Greater than: gt
 
-# Kittens
+* Greater than or equal: gte
 
-## Get All Kittens
+* Less than: lt
 
-```ruby
-require 'kittn'
+* Less than or equal: lte
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
+* Sample: {"created":{"gte":1439054168}}
 
-```python
-import kittn
+**Select specific fields**
 
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
+	application_fields: 
+	Type: Json array
+	Sample: “application_fields” : [“id”, “username”]
 
-```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
-```
+**Paging**
 
-```javascript
-const kittn = require('kittn');
+	application_limit
+	application_offset
 
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
-```
+**Order**
 
-> The above command returns JSON structured like this:
+	application_order_by: <field_name>
+	application_order_direction: asc | desc
 
-```json
-[
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
-  }
-]
-```
 
-This endpoint retrieves all kittens.
+## Response 
 
-### HTTP Request
-
-`GET http://example.com/api/kittens`
-
-### Query Parameters
-
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
-```
-
-> The above command returns JSON structured like this:
+> HTTP Code 200
 
 ```json
 {
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+	"has_error": false,
+	"error_code": "",
+	"data": {
+		"user_id":"4d1b9220-5a43-11e6-ae4a-6e8264809144"
+	}
 }
 ```
 
-This endpoint retrieves a specific kitten.
+> HTTP Code 500
 
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+```json
+{
+	"has_error": true,
+	"error_code": "123”
+	"error message": "RESOURCE NOT FOUND"
+}
+```
 
+# Template
+## Get
 ### HTTP Request
+`GET http://api.mail.dyno.me:19000/templates/:id`
+### Query Parameters
+Parameter | Default | Description
+--------- | ------- | -----------
+id | | Object id
+> The above command returns JSON structured like this:
+```json
+```
 
-`GET http://example.com/kittens/<ID>`
+## Create
+### HTTP Request
+`POST http://api.mail.dyno.me:19000/templates `
+> The above command returns JSON structured like this:
+```json
+```
 
-### URL Parameters
+## Change info
+### HTTP Request
+`PUT http://api.mail.dyno.me:19000/templates/:id`
+### Query Parameters
+Parameter | Default | Description
+--------- | ------- | -----------
+id | | Object id
+> The above command returns JSON structured like this:
+```json
+```
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
+## Delete
+### HTTP Request
+`DELETE http://api.mail.dyno.me:19000/templates/:id`
+### Query Parameters
+Parameter | Default | Description
+--------- | ------- | -----------
+id | | Object id
+> The above command returns JSON structured like this:
+```json
+```
 
+## Find
+### HTTP Request
+`POST http://api.mail.dyno.me:19000/templates/find`
+> The above command returns JSON structured like this:
+```json
+```
+
+## Count
+### HTTP Request
+`POST http://api.mail.dyno.me:19000/templates/count`
+> The above command returns JSON structured like this:
+```json
+```
+
+
+# Lists
+## Get
+### HTTP Request
+`GET http://api.mail.dyno.me:19000/lists/:id`
+### Query Parameters
+Parameter | Default | Description
+--------- | ------- | -----------
+id | | Object id
+> The above command returns JSON structured like this:
+```json
+```
+
+## Create
+### HTTP Request
+`POST http://api.mail.dyno.me:19000/lists`
+> The above command returns JSON structured like this:
+```json
+```
+
+## Change info
+### HTTP Request
+`PUT http://api.mail.dyno.me:19000/lists/:id`
+### Query Parameters
+Parameter | Default | Description
+--------- | ------- | -----------
+id | | Object id
+> The above command returns JSON structured like this:
+```json
+```
+
+## Delete
+### HTTP Request
+`DELETE http://api.mail.dyno.me:19000/lists/:id`
+### Query Parameters
+Parameter | Default | Description
+--------- | ------- | -----------
+id | | Object id
+> The above command returns JSON structured like this:
+```json
+```
+
+## Find
+### HTTP Request
+`POST http://api.mail.dyno.me:19000/lists/find`
+> The above command returns JSON structured like this:
+```json
+```
+
+## Count
+### HTTP Request
+`POST http://api.mail.dyno.me:19000/lists/count`
+> The above command returns JSON structured like this:
+```json
+```
+
+
+# Campaigns
+## Get
+### HTTP Request
+`GET http://api.mail.dyno.me:19000/campaigns/:id`
+### Query Parameters
+Parameter | Default | Description
+--------- | ------- | -----------
+id | | Object id
+> The above command returns JSON structured like this:
+```json
+```
+
+## Create
+### HTTP Request
+`POST http://api.mail.dyno.me:19000/campaigns `
+> The above command returns JSON structured like this:
+```json
+```
+
+## Change info
+### HTTP Request
+`PUT http://api.mail.dyno.me:19000/campaigns/:id`
+### Query Parameters
+Parameter | Default | Description
+--------- | ------- | -----------
+id | | Object id
+> The above command returns JSON structured like this:
+```json
+```
+
+## Delete
+### HTTP Request
+`DELETE http://api.mail.dyno.me:19000/campaigns/:id`
+### Query Parameters
+Parameter | Default | Description
+--------- | ------- | -----------
+id | | Object id
+> The above command returns JSON structured like this:
+```json
+```
+
+## Find
+### HTTP Request
+`POST http://api.mail.dyno.me:19000/campaigns/find`
+> The above command returns JSON structured like this:
+```json
+```
+
+## Count
+### HTTP Request
+`POST http://api.mail.dyno.me:19000/campaigns/count`
+> The above command returns JSON structured like this:
+```json
+```
+	
+# Campaigns process
+
+## Start campaign
+### HTTP Request
+`POST http://api.mail.dyno.me:19000/campaign_process/init`
+### Parameters
+Parameter | Default | Description
+--------- | ------- | -----------
+campaign_id | | campaign id
+iso_start_time  | | (yyyy-MM-dd'T'HH:mm:ss): optional
+time_zone | | optional 
+subject | |  optional
+from_name | | optional
+from_email | | optional
+preview_message | | optional
+> The above command returns JSON structured like this:
+```json
+```
+
+## Update & resume campaign
+### HTTP Request
+`POST http://api.mail.dyno.me:19000/campaign_process/update_and_resume`
+### Parameters
+Parameter | Default | Description
+--------- | ------- | -----------
+campaign_id | | campaign id
+subject | |  optional
+from_name | | optional
+from_email | | optional
+preview_message | | optional
+> The above command returns JSON structured like this:
+```json
+```
+
+## Reschedule campaign
+### HTTP Request
+`POST http://api.mail.dyno.me:19000/campaign_process/reschedule`
+### Parameters
+Parameter | Default | Description
+--------- | ------- | -----------
+campaign_id | | campaign id
+iso_start_time  | | (yyyy-MM-dd'T'HH:mm:ss): optional
+time_zone | | optional 
+subject | |  optional
+from_name | | optional
+from_email | | optional
+preview_message | | optional
+> The above command returns JSON structured like this:
+```json
+```
+
+## Cancel schedule
+### HTTP Request
+`POST http://api.mail.dyno.me:19000/campaign_process/cancel_schedule`
+### Parameters
+Parameter | Default | Description
+--------- | ------- | -----------
+id | | Object id
+> The above command returns JSON structured like this:
+```json
+```
+
+## Stop campaign
+### HTTP Request
+`POST http://api.mail.dyno.me:19000/campaign_process/stop`
+### Parameters
+Parameter | Default | Description
+--------- | ------- | -----------
+id | | Object id
+> The above command returns JSON structured like this:
+```json
+```
+
+## Pause campaign
+### HTTP Request
+`POST http://api.mail.dyno.me:19000/campaign_process/pause`
+### Parameters
+Parameter | Default | Description
+--------- | ------- | -----------
+id | | Object id
+> The above command returns JSON structured like this:
+```json
+```
+
+## Resume campaign
+### HTTP Request
+`POST http://api.mail.dyno.me:19000/campaign_process/resume`
+> The above command returns JSON structured like this:
+```json
+```

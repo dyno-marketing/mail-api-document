@@ -223,7 +223,7 @@ Our api support following type with operations</p>
     "</span><span class="err">error</span><span class="w"> </span><span class="err">message</span><span class="s2">": "</span><span class="err">RESOURCE</span><span class="w"> </span><span class="err">NOT</span><span class="w"> </span><span class="err">FOUND"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<h1 id="template">Template</h1>
+<h1 id="templates">Templates</h1>
 
 <h2 id="get">Get</h2>
 
@@ -844,6 +844,66 @@ Our api support following type with operations</p>
 <h3 id="http-request">HTTP Request</h3>
 
 <p><code class="prettyprint">POST http://api.mail.dyno.me:19000/campaign_process/resume</code></p>
+
+<blockquote>
+<p>The above command returns JSON structured like this:
+<code class="prettyprint">json
+</code></p>
+</blockquote>
+
+<h1 id="transactions">Transactions</h1>
+
+<h2 id="send">Send</h2>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">POST http://api.mail.dyno.me:19000/transactions</code></p>
+
+<h3 id="parameters">Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>email_content</td>
+<td></td>
+<td>campaign id</td>
+</tr>
+<tr>
+<td>subject</td>
+<td></td>
+<td>(yyyy-MM-dd&rsquo;T&#39;HH:mm:ss): optional</td>
+</tr>
+<tr>
+<td>from_name</td>
+<td></td>
+<td>optional</td>
+</tr>
+<tr>
+<td>subject</td>
+<td></td>
+<td>optional</td>
+</tr>
+<tr>
+<td>from_email</td>
+<td></td>
+<td>optional</td>
+</tr>
+<tr>
+<td>email_list</td>
+<td></td>
+<td>optional</td>
+</tr>
+<tr>
+<td>preview_message</td>
+<td></td>
+<td>optional</td>
+</tr>
+</tbody></table>
 
 <blockquote>
 <p>The above command returns JSON structured like this:

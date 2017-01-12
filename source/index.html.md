@@ -130,7 +130,7 @@ Our api support following type with operations
 }
 ```
 
-# Template
+# Templates
 ## Get
 ### HTTP Request
 `GET http://api.mail.dyno.me:19000/templates/:id`
@@ -256,7 +256,7 @@ id | | Object id
 
 ## Create
 ### HTTP Request
-`POST http://api.mail.dyno.me:19000/campaigns `
+`POST http://api.mail.dyno.me:19000/campaigns`
 > The above command returns JSON structured like this:
 ```json
 ```
@@ -384,6 +384,24 @@ id | | Object id
 ## Resume campaign
 ### HTTP Request
 `POST http://api.mail.dyno.me:19000/campaign_process/resume`
+> The above command returns JSON structured like this:
+```json
+```
+
+# Transactions
+## Send 
+### HTTP Request
+`POST http://api.mail.dyno.me:19000/transactions`
+### Parameters
+Parameter | Default | Description
+--------- | ------- | -----------
+email_content | | campaign id
+subject  | | (yyyy-MM-dd'T'HH:mm:ss): optional
+from_name | | optional 
+subject | |  optional
+from_email | | optional
+email_list | | optional
+preview_message | | optional
 > The above command returns JSON structured like this:
 ```json
 ```
